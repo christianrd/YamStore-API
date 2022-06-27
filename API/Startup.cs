@@ -1,6 +1,7 @@
 using API.Core.Application.Common.Dtos;
 using API.Core.Application.Common.Persistence;
 using API.Core.Application.Product.Commands.Create;
+using API.Infrastructure.Common.Middleware;
 using API.Infrastructure.Persistence;
 using API.Infrastructure.Persistence.Repository;
 using FluentValidation.AspNetCore;
@@ -36,6 +37,8 @@ namespace API
                 options.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
             });
 
+            services.AddCors();
+            
             services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddMediatR(typeof(CreateProductCommand).Assembly);
@@ -45,16 +48,22 @@ namespace API
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseMiddleware<ExceptionMiddleware>();
+            
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1"));
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(opt =>
+            {
+                opt.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000");
+            });
 
             app.UseAuthorization();
 

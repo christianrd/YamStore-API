@@ -8,9 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [ApiController]
-    [Route("Api/[Controller]s")]
-    public class ProductController : ControllerBase
+    public class ProductController : BaseApiController
     {
         private readonly IMediator _mediator;
 
@@ -29,7 +27,11 @@ namespace API.Controllers
         [HttpGet("{id:guid}")]
         public async Task<ActionResult<ProductDto>> GetByIdAsync(Guid id)
         {
-            return Ok(await _mediator.Send(new GetProductByIdQuery(){Id = id}));
+            var product = await _mediator.Send(new GetProductByIdQuery() {Id = id});
+            
+            if (product == null) return NotFound();
+            
+            return Ok(product);
         }
     }
 }
