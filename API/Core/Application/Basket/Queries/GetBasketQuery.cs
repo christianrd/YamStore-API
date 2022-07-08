@@ -1,9 +1,8 @@
 using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using API.Core.Application.Common.Dtos;
-using API.Infrastructure.Persistence;
+using API.Core.Application.Common.Persistence;
 using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -18,21 +17,23 @@ namespace API.Core.Application.Basket.Queries
     public class GetBasketQueryHandler : IRequestHandler<GetBasketQuery, BasketDto>
     {
         private readonly IMapper _mapper;
-        private readonly StoreContext _context;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public GetBasketQueryHandler(IMapper mapper, StoreContext context)
+        public GetBasketQueryHandler(IMapper mapper, IUnitOfWork unitOfWork)
         {
             _mapper = mapper;
-            _context = context;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<BasketDto> Handle(GetBasketQuery request, CancellationToken cancellationToken)
         {
-            var basket = await _context.Baskets
+            /*var basket = await _context.Baskets
                 .Include(i => i.Items)
                 .ThenInclude(p => p.Product)
-                .FirstOrDefaultAsync(x => x.BuyerId == request.BuyerId, cancellationToken: cancellationToken);
+                .FirstOrDefaultAsync(x => x.BuyerId == request.BuyerId, cancellationToken: cancellationToken);*/
 
+            var basket = await _unitOfWork.Baskets.Get(x => x.BuyerId == request.BuyerId, "Items,Items.Product")
+                .FirstOrDefaultAsync();
             return _mapper.Map<BasketDto>(basket);
         }
     }
