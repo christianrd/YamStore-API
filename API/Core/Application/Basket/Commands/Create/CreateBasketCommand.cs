@@ -10,7 +10,7 @@ namespace API.Core.Application.Basket.Commands.Create
 {
     public class CreateBasketCommand : IRequest<BasketDto>
     {
-        public Guid BuyerId { get; set; }
+        public Guid Id { get; set; }
     }
 
     public class CreateBasketCommandHandler : IRequestHandler<CreateBasketCommand, BasketDto>
@@ -27,7 +27,6 @@ namespace API.Core.Application.Basket.Commands.Create
         public async Task<BasketDto> Handle(CreateBasketCommand request, CancellationToken cancellationToken)
         {
             var basket = _mapper.Map<Domain.Entities.Basket>(request);
-            basket.Id = Guid.NewGuid();
             await _unitOfWork.Baskets.Insert(basket);
             var result = await _unitOfWork.Baskets.CommitChanges();
 

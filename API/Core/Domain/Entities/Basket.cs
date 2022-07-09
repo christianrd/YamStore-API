@@ -6,9 +6,7 @@ namespace API.Core.Domain.Entities
 {
     public class Basket : Entity
     {
-        public Guid BuyerId { get; set; }
-
-        public List<BasketItem> Items { get; set; } = new List<BasketItem>();
+        public List<BasketItem> Items { get; set; } = new();
 
         public void RemoveItem(Guid productId, int quantity)
         {

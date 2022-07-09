@@ -1,14 +1,12 @@
 using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using API.Core.Application.Common.Persistence;
-using API.Core.Domain.Entities;
 using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace API.Core.Application.Basket.Commands.Update
+namespace API.Core.Application.BasketItem.Command.Add
 {
     public class AddItemBasketCommand : IRequest<int>
     {
@@ -30,7 +28,7 @@ namespace API.Core.Application.Basket.Commands.Update
 
         public async Task<int> Handle(AddItemBasketCommand request, CancellationToken cancellationToken)
         {
-            var item = _mapper.Map<BasketItem>(request);
+            var item = _mapper.Map<Domain.Entities.BasketItem>(request);
             var items = await _unitOfWork.BasketItems.Get(x => x.BasketId == request.BasketId && x.ProductId == request.ProductId).ToListAsync();
             if (items.Count == 0)
                 await _unitOfWork.BasketItems.Insert(item);

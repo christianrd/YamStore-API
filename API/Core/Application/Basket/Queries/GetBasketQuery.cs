@@ -11,7 +11,7 @@ namespace API.Core.Application.Basket.Queries
 {
     public class GetBasketQuery : IRequest<BasketDto>
     {
-        public Guid BuyerId { get; set; }
+        public Guid Id { get; set; }
     }
 
     public class GetBasketQueryHandler : IRequestHandler<GetBasketQuery, BasketDto>
@@ -27,12 +27,7 @@ namespace API.Core.Application.Basket.Queries
 
         public async Task<BasketDto> Handle(GetBasketQuery request, CancellationToken cancellationToken)
         {
-            /*var basket = await _context.Baskets
-                .Include(i => i.Items)
-                .ThenInclude(p => p.Product)
-                .FirstOrDefaultAsync(x => x.BuyerId == request.BuyerId, cancellationToken: cancellationToken);*/
-
-            var basket = await _unitOfWork.Baskets.Get(x => x.BuyerId == request.BuyerId, "Items,Items.Product")
+            var basket = await _unitOfWork.Baskets.Get(x => x.Id == request.Id, "Items,Items.Product")
                 .FirstOrDefaultAsync();
             return _mapper.Map<BasketDto>(basket);
         }

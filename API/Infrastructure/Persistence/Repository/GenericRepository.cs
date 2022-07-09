@@ -45,6 +45,12 @@ namespace API.Infrastructure.Persistence.Repository
             await Update(entity);
         }
 
+        public Task Delete(T entity)
+        {
+            _context.Remove(entity);
+            return Task.CompletedTask;
+        }
+
         public async Task<IEnumerable<T>> GetAllAsync() => await DbSet.Where(x => x.Deleted == false).OrderByDescending(x => x.CreatedAt).ToListAsync();
 
         public async Task<T> GetById(Guid id) => await DbSet.FirstOrDefaultAsync(x => x.Id == id && x.Deleted == false);

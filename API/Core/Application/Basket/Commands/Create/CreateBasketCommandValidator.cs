@@ -6,7 +6,7 @@ namespace API.Core.Application.Basket.Commands.Create
     {
         public CreateBasketCommandValidator()
         {
-            RuleFor(x => x.BuyerId).NotEmpty();
+            RuleFor(x => x.Id).NotEmpty();
         }
     }
 }

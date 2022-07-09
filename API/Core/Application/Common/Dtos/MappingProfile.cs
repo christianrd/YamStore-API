@@ -1,7 +1,6 @@
 using API.Core.Application.Basket.Commands.Create;
-using API.Core.Application.Basket.Commands.Update;
+using API.Core.Application.BasketItem.Command.Add;
 using API.Core.Application.Product.Commands.Create;
-using API.Core.Domain.Entities;
 using AutoMapper;
 
 namespace API.Core.Application.Common.Dtos
@@ -14,8 +13,8 @@ namespace API.Core.Application.Common.Dtos
             CreateMap<Domain.Entities.Product, ProductDto>();
             CreateMap<CreateBasketCommand, Domain.Entities.Basket>();
             CreateMap<Domain.Entities.Basket, BasketDto>().ReverseMap();
-            CreateMap<AddItemBasketCommand, BasketItem>();
-            CreateMap<BasketItem, BasketItemDto>()
+            CreateMap<AddItemBasketCommand, Domain.Entities.BasketItem>();
+            CreateMap<Domain.Entities.BasketItem, BasketItemDto>()
                 .ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.Product.Name))
                 .ForMember(dest => dest.Price, opts => opts.MapFrom(src => src.Product.Price))
                 .ForMember(dest => dest.PictureUrl, opts => opts.MapFrom(src => src.Product.PictureUrl))

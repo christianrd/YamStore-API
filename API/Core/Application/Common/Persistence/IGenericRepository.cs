@@ -13,6 +13,7 @@ namespace API.Core.Application.Common.Persistence
         Task<T> Insert(T entity);
         Task Update(T entity);
         Task SoftDelete(T entity);
+        Task Delete(T entity);
         Task<IEnumerable<T>> GetAllAsync();
         Task<T> GetById(Guid id);
         IQueryable<T> Get(Expression<Func<T, bool>> where, string includeProperties = "");
