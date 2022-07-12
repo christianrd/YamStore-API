@@ -19,9 +19,9 @@ namespace API.Controllers
         
         
         [HttpGet]
-        public async Task<ActionResult<List<ProductDto>>> GetAllAsync()
+        public async Task<ActionResult<List<ProductDto>>> GetAllAsync(string orderBy)
         {
-            return Ok(await _mediator.Send(new GetAllProductQuery()));
+            return Ok(await _mediator.Send(new GetAllProductQuery{OrderBy = orderBy}));
         }
 
         [HttpGet("{id:guid}")]
