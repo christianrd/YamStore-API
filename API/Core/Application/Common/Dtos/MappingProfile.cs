@@ -12,7 +12,7 @@ namespace API.Core.Application.Common.Dtos
             CreateMap<CreateProductCommand, Domain.Entities.Product>();
             CreateMap<Domain.Entities.Product, ProductDto>();
             CreateMap<CreateBasketCommand, Domain.Entities.Basket>();
-            CreateMap<Domain.Entities.Basket, BasketDto>().ReverseMap();
+            CreateMap<Domain.Entities.Basket, BasketDto>();
             CreateMap<AddItemBasketCommand, Domain.Entities.BasketItem>();
             CreateMap<Domain.Entities.BasketItem, BasketItemDto>()
                 .ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.Product.Name))

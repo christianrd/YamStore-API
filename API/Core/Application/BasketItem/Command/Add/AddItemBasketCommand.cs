@@ -29,12 +29,14 @@ namespace API.Core.Application.BasketItem.Command.Add
         public async Task<int> Handle(AddItemBasketCommand request, CancellationToken cancellationToken)
         {
             var item = _mapper.Map<Domain.Entities.BasketItem>(request);
-            var items = await _unitOfWork.BasketItems.Get(x => x.BasketId == request.BasketId && x.ProductId == request.ProductId).ToListAsync();
-            if (items.Count == 0)
+            var items = await _unitOfWork.BasketItems.Get(x => x.BasketId == request.BasketId && x.ProductId == request.ProductId).FirstOrDefaultAsync();
+            if (items == null)
                 await _unitOfWork.BasketItems.Insert(item);
-            
-            var existingItem = await _unitOfWork.BasketItems.Get(x => x.ProductId == request.ProductId).FirstOrDefaultAsync();
-            if (existingItem != null) existingItem.Quantity += request.Quantity;
+            else
+            {
+                items.Quantity += request.Quantity;
+                await _unitOfWork.BasketItems.Update(items);
+            }
 
             return await _unitOfWork.BasketItems.CommitChanges();
         }
