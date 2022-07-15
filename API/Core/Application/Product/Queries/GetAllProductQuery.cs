@@ -2,10 +2,10 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using API.Core.Application.Common.Dtos;
+using API.Core.Application.Common.Extensions;
 using API.Core.Application.Common.Persistence;
 using AutoMapper;
 using MediatR;
-using System.Linq;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Core.Application.Product.Queries
@@ -29,7 +29,6 @@ namespace API.Core.Application.Product.Queries
         public async Task<List<ProductDto>> Handle(GetAllProductQuery request, CancellationToken cancellationToken)
         {
             var query = _unitOfWork.Product.Get(x => x.Deleted == false).Sort(request.OrderBy);
-
             
             return _mapper.Map<List<ProductDto>>(await query.ToListAsync());
         }
